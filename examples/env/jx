@@ -1,0 +1,7 @@
+export CHARTMUSEUM_URL="http://172.16.151.114:8088"
+export TILLER_ADDR="172.16.161.74:30859"
+export FILESERVER_URL="http://jx.fileserver.fccs.cn"
+export JENKINS_URL="http://172.16.151.114:8080"
+export JENKINS_USER="root"
+export JENKINS_PASS="jks2018"
+export KUBECONFIG="/Users/xavi/.kube/config"
