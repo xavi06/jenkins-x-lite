@@ -1,0 +1,26 @@
+apiVersion: tekton.dev/v1alpha1
+kind: TaskRun
+metadata:
+  name: helloworld-task-run
+  namespace: tekton-pipelines
+  labels:
+    app: helloworld-maven
+spec:
+  serviceAccount: tekton-git-and-docker
+  taskRef:
+    name: helloworld-task
+  inputs:
+    resources:
+      - name: helloworld
+        resourceRef:
+          name: helloworld-git
+    params:
+      - name: pathToDockerFile
+        value: Dockerfile
+      - name: pathToContext
+        value: /workspace/helloworld #configure: may change according to your source
+  outputs:
+    resources:
+      - name: builtImage
+        resourceRef:
+          name: helloworld-docker

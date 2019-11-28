@@ -1,0 +1,23 @@
+apiVersion: tekton.dev/v1alpha1
+kind: PipelineResource
+metadata:
+  name: helloworld-git
+  namespace: tekton-pipelines
+spec:
+  type: git
+  params:
+    - name: revision
+      value: master
+    - name: url
+      value:  http://git.fccs.com/fccs_zj/helloworld-maven.git
+---
+apiVersion: tekton.dev/v1alpha1
+kind: PipelineResource
+metadata:
+  name: helloworld-docker
+  namespace: tekton-pipelines
+spec:
+  type: image
+  params:
+    - name: url
+      value: jxregistry.docker.fccs.cn:28888/zj/maven/helloworld:1.0.0

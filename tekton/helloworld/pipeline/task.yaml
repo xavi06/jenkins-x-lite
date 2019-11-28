@@ -1,0 +1,46 @@
+apiVersion: tekton.dev/v1alpha1
+kind: Task
+metadata:
+  name: helloworld-task
+  namespace: tekton-pipelines
+spec:
+  inputs:
+    resources:
+      - name: helloworld
+        type: git
+    params:
+      - name: pathToDockerFile
+        description: The path to the dockerfile to build
+        default: /workspace/helloworld/Dockerfile
+      - name: pathToContext
+        description:
+          The build context used by Kaniko
+          (https://github.com/GoogleContainerTools/kaniko#kaniko-build-contexts)
+        default: /workspace/helloworld
+  outputs:
+    resources:
+      - name: builtImage
+        type: image
+  steps:
+    - name: mvn-package
+      image: jxregistry.docker.fccs.cn:28888/zj/tekton/maven-executor:3.5.4-0
+      workingDir: /workspace/helloworld
+      command:
+        - mvn
+      args:
+        - clean
+        - package
+    - name: build-and-push
+      image: gcr.io/kaniko-project/executor
+      # specifying DOCKER_CONFIG is required to allow kaniko to detect docker credential
+      env:
+        - name: "DOCKER_CONFIG"
+          value: "/builder/home/.docker/"
+      command:
+        - /kaniko/executor
+      args:
+        - --dockerfile=${inputs.params.pathToDockerFile}
+        - --destination=${outputs.resources.builtImage.url}
+        - --context=${inputs.params.pathToContext}
+        - --insecure
+        - --insecure-pull
