@@ -34,3 +34,5 @@ require (
 	gopkg.in/yaml.v2 v2.2.2
 	k8s.io/helm v2.14.1+incompatible
 )
+
+go 1.13
